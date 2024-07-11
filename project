@@ -1,0 +1,29 @@
+WITH DeptAvgSalary AS (
+    SELECT 
+        d.Name AS DepartmentName,
+        AVG(e.Salary) AS AverageSalary,
+        COUNT(e.EmployeeID) AS NumberOfEmployees
+    FROM 
+        Employees e
+    JOIN 
+        Departments d
+    ON 
+        e.DepartmentID = d.DepartmentID
+    GROUP BY 
+        d.Name
+),
+OverallAvgSalary AS (
+    SELECT 
+        AVG(Salary) AS OverallAverageSalary
+    FROM 
+        Employees
+)
+SELECT 
+    das.DepartmentName,
+    das.AverageSalary,
+    das.NumberOfEmployees
+FROM 
+    DeptAvgSalary das,
+    OverallAvgSalary oas
+WHERE 
+    das.AverageSalary > oas.OverallAverageSalary;
